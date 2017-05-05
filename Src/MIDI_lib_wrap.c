@@ -10,6 +10,8 @@
 uint8_t start_status = 0;
 uint16_t resturt_counter,restart_value = DEFAULT_RESTART_STEPS_VALUE;
 
+extern uint8_t need_start;
+
 extern osThreadId LedTaskHandle;
 
 
@@ -25,7 +27,7 @@ void MIDI_recive_clock_pulse_handler(void){
 
 	if(!start_status){
 
-		put_MIDI_start();
+		//put_MIDI_start();
 
 		xHigherPriorityTaskWoken = pdFALSE;
 		xTaskNotifyFromISR( LedTaskHandle,
@@ -51,8 +53,10 @@ void MIDI_recive_clock_pulse_handler(void){
 void MIDI_recive_start_handler(void){
 	BaseType_t xHigherPriorityTaskWoken;
 
-
-	put_MIDI_start();
+	if(need_start){
+		put_MIDI_start();
+		need_start = 0;
+	}
 	xHigherPriorityTaskWoken = pdFALSE;
 	xTaskNotifyFromISR( LedTaskHandle,
 							( 1UL << 1UL ),
@@ -74,14 +78,18 @@ void start_button_handle(extLine_HandleTypeDef *start_button_extLine_struct){
 		if(start_button_extLine_struct->extLine_level_status == extLine_level_ZERO){
 			//xTaskNotify(LedTaskHandle, ( 1UL << 1UL ), eSetBits );
 
-			resturt_counter = 0;
-			start_status = 5;
-			put_MIDI_start();
+
+			need_start = 5;
 
 
-			xTaskNotify( LedTaskHandle,
-									( 1UL << 1UL ),
-									eSetBits );
+//			resturt_counter = 0;
+//			start_status = 5;
+//			put_MIDI_start();
+//
+//
+//			xTaskNotify( LedTaskHandle,
+//									( 1UL << 1UL ),
+//									eSetBits );
 
 
 		}

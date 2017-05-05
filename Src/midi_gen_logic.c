@@ -44,12 +44,15 @@ extLine_HandleTypeDef 	enc01_extLine_struct,
 
 encoder_HandleTypeDef enc01_struct;
 
+uint8_t need_start = 0;
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
 void Perf_Task(void){
+
+uint8_t	led_trigger,led_trigger_val;
 
 	extLine_init(&start_button_extLine_struct, button01_GPIO_Port, button01_Pin);
 
@@ -71,6 +74,24 @@ void Perf_Task(void){
 		  //encoder_handle(&enc01_struct);
 		  start_button_handle(&start_button_extLine_struct);
 		  osDelay(1);
+
+		  if(need_start){
+			  if(led_trigger){
+				  if(!led_trigger_val--){
+					  led_trigger_val = 40;
+					  led_trigger = 0;
+					  Onboard_led_ON();
+				  }
+			  }else{
+				  if(!led_trigger_val--){
+					  led_trigger_val = 40;
+					  led_trigger = 5;
+					  Onboard_led_OFF();
+				  }
+			  }
+
+		  }
+
 	  }
 }
 
