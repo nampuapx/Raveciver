@@ -65,7 +65,7 @@ void MIDI_recive_start_handler(void){
 	portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 
 	resturt_counter = 0;
-	start_status = 5;
+	start_status = 0;
 
 }
 
