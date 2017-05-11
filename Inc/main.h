@@ -53,7 +53,7 @@
 
 #define LED_ONBOARD_BLUE_Pin GPIO_PIN_13
 #define LED_ONBOARD_BLUE_GPIO_Port GPIOC
-#define lamp_01_Pin GPIO_PIN_2
+#define lamp_01_Pin GPIO_PIN_0
 #define lamp_01_GPIO_Port GPIOB
 #define button01_Pin GPIO_PIN_10
 #define button01_GPIO_Port GPIOB

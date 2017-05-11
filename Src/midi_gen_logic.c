@@ -30,6 +30,12 @@
 #include "encoder.h"
 #include "MIDI_lib\midi_lib.h"
 
+
+
+#define BUTTON_BLINK_DELAY 100
+
+
+
 extern osThreadId LedTaskHandle;
 extern UART_HandleTypeDef huart1;
 extern osThreadId lamp_TaskHandle;
@@ -78,19 +84,20 @@ uint8_t	led_trigger,led_trigger_val;
 		  if(need_start){
 			  if(led_trigger){
 				  if(!led_trigger_val--){
-					  led_trigger_val = 40;
+					  led_trigger_val = BUTTON_BLINK_DELAY;
 					  led_trigger = 0;
 					  Onboard_led_ON();
+					  lamp01_ON();
 				  }
 			  }else{
 				  if(!led_trigger_val--){
-					  led_trigger_val = 40;
+					  led_trigger_val = BUTTON_BLINK_DELAY;
 					  led_trigger = 5;
 					  Onboard_led_OFF();
+					  lamp01_OFF();
 				  }
 			  }
-
-		  }
+		  }//if(need_start){
 
 	  }
 }
@@ -111,13 +118,12 @@ void lamp_Task(void){
 
 
 
-//
-//		HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_SET);
-//		osDelay(100);
-//		HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_RESET);
+
 						Onboard_led_ON();
-						osDelay(20);
+						lamp01_ON();
+						osDelay(50);
 						Onboard_led_OFF();
+						lamp01_OFF();
 		}
 }
 
@@ -153,15 +159,19 @@ void led_task(void){
 
 			if(( ulNotifiedValue & 0x02 ) != 0 ){
 				Onboard_led_ON();
+				lamp01_ON();
 				osDelay(200);
 				Onboard_led_OFF();
+				lamp01_OFF();
 			}
 
 	        if(( ulNotifiedValue & 0x01 ) != 0 )
 	        {
 	        	Onboard_led_ON();
-				osDelay(10);
+	        	lamp01_ON();
+				osDelay(50);
 				Onboard_led_OFF();
+				lamp01_OFF();
 	        }
 	  }
 }

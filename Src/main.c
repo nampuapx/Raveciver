@@ -108,6 +108,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   	  Onboard_led_OFF();
+  	  lamp01_OFF();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -297,13 +298,13 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : LED_ONBOARD_BLUE_Pin */
   GPIO_InitStruct.Pin = LED_ONBOARD_BLUE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_ONBOARD_BLUE_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : lamp_01_Pin */
   GPIO_InitStruct.Pin = lamp_01_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(lamp_01_GPIO_Port, &GPIO_InitStruct);
 
@@ -320,11 +321,16 @@ static void MX_GPIO_Init(void)
 void Onboard_led_ON(void){
 	HAL_GPIO_WritePin(LED_ONBOARD_BLUE_GPIO_Port, LED_ONBOARD_BLUE_Pin, GPIO_PIN_RESET);
 }
-
 void Onboard_led_OFF(void){
 	HAL_GPIO_WritePin(LED_ONBOARD_BLUE_GPIO_Port, LED_ONBOARD_BLUE_Pin, GPIO_PIN_SET);
 }
 
+void lamp01_ON(void){
+	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_RESET);
+}
+void lamp01_OFF(void){
+	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_SET);
+}
 /* USER CODE END 4 */
 
 /* StartDefaultTask function */
