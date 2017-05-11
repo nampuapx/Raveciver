@@ -1,0 +1,3 @@
+[submodule "Src/MIDI_lib"]
+	path = Src/MIDI_lib
+	url = https://github.com/nampuapx/MIDI_lib.git
