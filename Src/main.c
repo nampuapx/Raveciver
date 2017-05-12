@@ -326,10 +326,10 @@ void Onboard_led_OFF(void){
 }
 
 void lamp01_ON(void){
-	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_SET);
 }
 void lamp01_OFF(void){
-	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(lamp_01_GPIO_Port, lamp_01_Pin, GPIO_PIN_RESET);
 }
 /* USER CODE END 4 */
 
