@@ -32,7 +32,7 @@
 
 
 
-#define BUTTON_BLINK_DELAY 100
+#define BUTTON_BLINK_DELAY 40
 
 
 
@@ -160,7 +160,7 @@ void led_task(void){
 			if(( ulNotifiedValue & 0x02 ) != 0 ){
 				Onboard_led_ON();
 				lamp01_ON();
-				osDelay(200);
+				osDelay(130);
 				Onboard_led_OFF();
 				lamp01_OFF();
 			}
