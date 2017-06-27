@@ -398,7 +398,12 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+//	Onboard_led_ON();
+//    osDelay(100);
+//	Onboard_led_OFF();
+
+    osDelay(100);
+
   }
   /* USER CODE END 5 */ 
 }
@@ -438,7 +443,7 @@ void Start_lamp_Task(void const * argument)
 //  {
 //    osDelay(10);
 //  }
-	lamp_Task();
+	lcd_Task();
 
   /* USER CODE END Start_lamp_Task */
 }

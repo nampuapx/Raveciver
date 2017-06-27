@@ -52,6 +52,8 @@ encoder_HandleTypeDef enc01_struct;
 
 uint8_t need_start = 0;
 
+#define WS_LEN 2
+uint32_t ws_buff[WS_LEN];
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -59,6 +61,41 @@ uint8_t need_start = 0;
 void Perf_Task(void){
 
 uint8_t	led_trigger,led_trigger_val;
+
+
+
+
+/* Unlock the Flash to enable the flash control register access *************/
+HAL_FLASH_Unlock();
+
+/* Unlock the Options Bytes *************************************************/
+HAL_FLASH_OB_Unlock();
+
+FLASH_OBProgramInitTypeDef my_pOBInit;
+/* Get pages write protection status ****************************************/
+HAL_FLASHEx_OBGetConfig(&my_pOBInit);
+
+/* Check if readoutprtection is enabled ***********************/
+if((my_pOBInit.RDPLevel) == OB_RDP_LEVEL_0)
+{
+	my_pOBInit.OptionType= OPTIONBYTE_RDP;
+	my_pOBInit.RDPLevel   = OB_RDP_LEVEL_1;
+  if(HAL_FLASHEx_OBProgram(&my_pOBInit) != HAL_OK)
+  {
+    /* Error occurred while options bytes programming. **********************/
+	  Error_Handler();
+  }
+  /* Generate System Reset to load the new option byte values ***************/
+  HAL_FLASH_OB_Launch();
+}
+/* Lock the Options Bytes *************************************************/
+HAL_FLASH_OB_Lock();
+
+
+
+
+
+
 
 	extLine_init(&start_button_extLine_struct, button01_GPIO_Port, button01_Pin);
 
@@ -78,33 +115,49 @@ uint8_t	led_trigger,led_trigger_val;
 	  for(;;)
 	  {
 		  //encoder_handle(&enc01_struct);
-		  start_button_handle(&start_button_extLine_struct);
-		  osDelay(1);
+		  //start_button_handle(&start_button_extLine_struct);
+		  int i;
+		  for(i=0;i<WS_LEN;i++){
+			  ws_buff[i] = 0;
+		  }
+		  ws_buff[1] = 0xffffffff;
 
-		  if(need_start){
-			  if(led_trigger){
-				  if(!led_trigger_val--){
-					  led_trigger_val = BUTTON_BLINK_DELAY;
-					  led_trigger = 0;
-					  Onboard_led_ON();
-					  lamp01_ON();
-				  }
-			  }else{
-				  if(!led_trigger_val--){
-					  led_trigger_val = BUTTON_BLINK_DELAY;
-					  led_trigger = 5;
-					  Onboard_led_OFF();
-					  lamp01_OFF();
-				  }
-			  }
-		  }//if(need_start){
+		  	WS2812_buff_send(ws_buff,WS_LEN);
+
+			uint32_t ulNotifiedValue;
+
+			xTaskNotifyWait( 	0x00,      /* Don't clear any notification bits on entry. */
+										0xffffffff , /* Reset the notification value to 0 on exit. */
+										&ulNotifiedValue, /* Notified value pass out in
+														  ulNotifiedValue. */
+										portMAX_DELAY );  /* Block indefinitely. */
+
+		  osDelay(100);
+
+//		  if(need_start){
+//			  if(led_trigger){
+//				  if(!led_trigger_val--){
+//					  led_trigger_val = BUTTON_BLINK_DELAY;
+//					  led_trigger = 0;
+//					  Onboard_led_ON();
+//					  lamp01_ON();
+//				  }
+//			  }else{
+//				  if(!led_trigger_val--){
+//					  led_trigger_val = BUTTON_BLINK_DELAY;
+//					  led_trigger = 5;
+//					  Onboard_led_OFF();
+//					  lamp01_OFF();
+//				  }
+//			  }
+//		  }//if(need_start){
 
 	  }
 }
 
 
 
-void lamp_Task(void){
+void lcd_Task(void){
 
 	uint32_t ulNotifiedValue;
 
