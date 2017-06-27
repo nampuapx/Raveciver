@@ -64,32 +64,32 @@ uint8_t	led_trigger,led_trigger_val;
 
 
 
-
-/* Unlock the Flash to enable the flash control register access *************/
-HAL_FLASH_Unlock();
-
-/* Unlock the Options Bytes *************************************************/
-HAL_FLASH_OB_Unlock();
-
-FLASH_OBProgramInitTypeDef my_pOBInit;
-/* Get pages write protection status ****************************************/
-HAL_FLASHEx_OBGetConfig(&my_pOBInit);
-
-/* Check if readoutprtection is enabled ***********************/
-if((my_pOBInit.RDPLevel) == OB_RDP_LEVEL_0)
-{
-	my_pOBInit.OptionType= OPTIONBYTE_RDP;
-	my_pOBInit.RDPLevel   = OB_RDP_LEVEL_1;
-  if(HAL_FLASHEx_OBProgram(&my_pOBInit) != HAL_OK)
-  {
-    /* Error occurred while options bytes programming. **********************/
-	  Error_Handler();
-  }
-  /* Generate System Reset to load the new option byte values ***************/
-  HAL_FLASH_OB_Launch();
-}
-/* Lock the Options Bytes *************************************************/
-HAL_FLASH_OB_Lock();
+//
+///* Unlock the Flash to enable the flash control register access *************/
+//HAL_FLASH_Unlock();
+//
+///* Unlock the Options Bytes *************************************************/
+//HAL_FLASH_OB_Unlock();
+//
+//FLASH_OBProgramInitTypeDef my_pOBInit;
+///* Get pages write protection status ****************************************/
+//HAL_FLASHEx_OBGetConfig(&my_pOBInit);
+//
+///* Check if readoutprtection is enabled ***********************/
+//if((my_pOBInit.RDPLevel) == OB_RDP_LEVEL_0)
+//{
+//	my_pOBInit.OptionType= OPTIONBYTE_RDP;
+//	my_pOBInit.RDPLevel   = OB_RDP_LEVEL_1;
+//  if(HAL_FLASHEx_OBProgram(&my_pOBInit) != HAL_OK)
+//  {
+//    /* Error occurred while options bytes programming. **********************/
+//	  Error_Handler();
+//  }
+//  /* Generate System Reset to load the new option byte values ***************/
+//  HAL_FLASH_OB_Launch();
+//}
+///* Lock the Options Bytes *************************************************/
+//HAL_FLASH_OB_Lock();
 
 
 
